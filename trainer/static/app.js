@@ -25,6 +25,8 @@ function clearNotice() { el("notice").classList.add("hidden"); }
 async function reload() {
   snapshot = await api("/api/state");
   const games = snapshot.games;
+  activeStates = Object.fromEntries(games.flatMap((game) =>
+    game.features.map((feature) => [feature.id, feature.enabled])));
   el("games").replaceChildren();
   games.forEach((g) => {
     const btn = document.createElement("button");
