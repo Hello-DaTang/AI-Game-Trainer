@@ -8,6 +8,13 @@ on:
       - "launcher.py"
       - "packaging/**"
       - "trainer/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/release.yml"
+      - "launcher.py"
+      - "packaging/**"
+      - "trainer/**"
   workflow_dispatch:
 
 permissions:
@@ -118,6 +125,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish tagged GitHub Release
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.package.outputs.release_version }}
