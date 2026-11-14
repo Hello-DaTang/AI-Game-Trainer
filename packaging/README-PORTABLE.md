@@ -1,4 +1,4 @@
-# AI Game Trainer v0.1.2 — Windows 便携版
+# AI Game Trainer v0.1.3 — Windows 便携版
 
 这一版不需要在本机安装 Python、Node.js、Rust、Git 或 pip。
 
@@ -8,7 +8,7 @@
 3. 控制台窗口会保持打开，并自动弹出浏览器 http://127.0.0.1:8765 。关闭控制台会退出程序。
 4. 修改器保存的配置、SQLite 和 CE 表位于 %LOCALAPPDATA%\AI-Game-Trainer，升级时不会随着程序文件夹清理。
 
-## 零学习一键测试
+## 零学习一键测试（修复版）
 
 完成 CE Bridge 加载后，回到浏览器首页，点击「开始一键实测」。软件会自动启动内置 AITrainerDemo.exe，并通过 CE 完成 123 → 777 → 123 的内存读写校验，结束后关闭测试进程。你不必手动扫描地址，也不需要打开真实游戏。
 
