@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sqlite3
+from contextlib import contextmanager
 import uuid
 from pathlib import Path
 
@@ -36,12 +37,17 @@ class Store:
                 );
             """)
 
+    @contextmanager
     def _connect(self):
         db = sqlite3.connect(self.path, timeout=10)
-        db.row_factory = sqlite3.Row
-        db.execute("PRAGMA foreign_keys = ON")
-        db.execute("PRAGMA busy_timeout = 10000")
-        return db
+        try:
+            db.row_factory = sqlite3.Row
+            db.execute("PRAGMA foreign_keys = ON")
+            db.execute("PRAGMA busy_timeout = 10000")
+            with db:
+                yield db
+        finally:
+            db.close()
 
     def add_game(self, name: str, exe: str):
         name, exe = name.strip(), exe.strip()
