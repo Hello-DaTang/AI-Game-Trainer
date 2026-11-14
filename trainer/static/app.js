@@ -106,7 +106,7 @@ async function refreshBridge() {
     el("bridge-status").title = status.message || "";
   } catch (err) { el("bridge-status").textContent = "Bridge 检查失败"; }
 }
-el("self-test").addEventListener("click", async () => {
+el("self-test")?.addEventListener("click", async () => {
   const button = el("self-test");
   const output = el("self-test-result");
   button.disabled = true;

@@ -106,7 +106,7 @@ def make_handler(service: TrainerService):
                     raise ValueError("JSON body must be an object")
                 result = self._route(urlsplit(self.path).path, payload)
                 return self._json(200, result)
-            except (StoreError, ValueError, KeyError, TypeError) as exc:
+            except (StoreError, DiagnosticError, ValueError, KeyError, TypeError) as exc:
                 return self._json(400, {"error": str(exc)})
             except BridgeError as exc:
                 return self._json(502, {"error": str(exc)})
