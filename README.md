@@ -1,8 +1,14 @@
 # AI Game Trainer
 
+## 免安装下载（Windows x64）
+
+**优先推荐 [GitHub Releases](https://github.com/Hello-DaTang/AI-Game-Trainer/releases)**：下载 AI-Game-Trainer-Windows-x64.zip → 完整解压 → 双击 AI-Game-Trainer.exe，即可打开本地控制台，无须在电脑上安装 Python、Git、Node.js、Rust 或 pip。
+
+ZIP 包内包含 CE-Bridge/ce_mcp_bridge.lua，仍需单独安装 Cheat Engine 并手动加载 Lua Bridge。详见 ZIP 内的《使用说明.md》。本版本仍是修改记录持久化 MVP，**没有内嵌 Codex 对话 Agent**。
+
 在 Cheat Engine + AI 的探索阶段制作修改功能，验证满意后保存为游戏专属按钮。下次进入单机游戏，直接点击按钮即可调用已经保存的 CE 修改记录。
 
-> **当前版本：0.1.0，开发验证版。** 已实现游戏库、CE Bridge 探活、从 CE 捕获地址列表记录、将整张 CE 表保存为 .CT、重新载入后开启/关闭指定记录、SQLite 持久化、本地网页控制台。**尚未集成内置自然语言聊天或 Codex SDK，也未提供 Tauri 安装包。** Agent 可以在外部 Codex + CE MCP 中探索，再把结果导入本软件。不能保证任何游戏中的修改成功或跨版本稳定。
+> **当前版本：0.1.1，开发验证版。** 已实现游戏库、CE Bridge 探活、从 CE 捕获地址列表记录、将整张 CE 表保存为 .CT、重新载入后开启/关闭指定记录、SQLite 持久化、本地网页控制台。**尚未集成内置自然语言聊天或 Codex SDK，已提供 Windows 免 Python 便携包，但仍未提供 Tauri 安装包。** Agent 可以在外部 Codex + CE MCP 中探索，再把结果导入本软件。不能保证任何游戏中的修改成功或跨版本稳定。
 
 ## 架构
 
