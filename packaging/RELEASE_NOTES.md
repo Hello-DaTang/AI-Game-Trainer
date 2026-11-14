@@ -1,11 +1,15 @@
-## AI Game Trainer v0.1.1 — Windows 免 Python 便携版
+## AI Game Trainer v0.1.2 — CE 一键实测
 
-新增 Windows x64 ZIP，解压后双击 AI-Game-Trainer.exe，即可自动打开本地浏览器管理界面；不需要安装 Python、Node.js、Rust、Git 或 pip。
+你不需要手动操作 CE、学习扫描或打开真实游戏，就能验证内存读写链路。
 
-包含游戏库、SQLite 持久化、保存与重放 CE 的 CT 表、按已验证的 CE MemoryRecord 一键开启/关闭，以及随包附带的 CE Bridge v12 Lua 脚本。
+新增：
+- 首页和游戏工作台都有「开始一键实测」按钮。
+- 随包提供独立、无网络功能的 Tools\AITrainerDemo.exe 测试进程。
+- 自动通过已启动的 Cheat Engine Bridge：附加测试进程、读取 DWORD 123、改写为 777、校验、恢复 123，并结束测试进程。
+- 尝试恢复 CE 原先附加的进程；如果恢复失败会给出提示。
+- 内存修改不接触用户游戏，也不会更改游戏库和已保存 CT。
+- 扩展自动化测试与 Windows 打包的示例 EXE 启动验证。
 
-使用顺序：下载 ZIP → 完整解压 → 双击 EXE → 在 Cheat Engine 加载 CE-Bridge\ce_mcp_bridge.lua → 选择离线游戏进程。
+安装：下载 AI-Game-Trainer-Windows-x64.zip，完整解压，运行 AI-Game-Trainer.exe；保持 Cheat Engine 7.7 与其 Lua Bridge 运行，在首页点击「开始一键实测」。
 
-尚未内嵌 Codex 自然语言 Agent；Cheat Engine 主程序需要单独安装。真实 Windows + CE 游戏场景尚需用户本机联调。仅用于有权限修改的离线单机程序。
-
-程序尚未进行代码签名；发布同时包含 SHA256 校验文件。
+此版本验证的是 CE 通信和读写，不是自然语言 AI Agent 或 CT 跨重启测试。Cheat Engine 主程序仍需单独安装。本项目仅面向有权修改的离线单机测试程序。

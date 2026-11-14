@@ -8,6 +8,7 @@ on:
       - "launcher.py"
       - "packaging/**"
       - "trainer/**"
+      - "tests/fixtures/**"
   pull_request:
     branches: [main]
     paths:
@@ -15,6 +16,7 @@ on:
       - "launcher.py"
       - "packaging/**"
       - "trainer/**"
+      - "tests/fixtures/**"
   workflow_dispatch:
 
 permissions:
@@ -54,6 +56,37 @@ jobs:
           python -m PyInstaller --noconfirm --clean --onedir --name AI-Game-Trainer --add-data "trainer/static;trainer/static" --hidden-import win32file --hidden-import pywintypes --hidden-import win32timezone launcher.py
           if ($LASTEXITCODE -ne 0) { throw "PyInstaller build failed" }
           if (-not (Test-Path "dist\AI-Game-Trainer\AI-Game-Trainer.exe")) { throw "Missing exe" }
+
+      - name: Load Visual Studio C compiler
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build standalone memory test target
+        run: |
+          $target = "dist\AI-Game-Trainer\Tools"
+          New-Item -ItemType Directory -Force -Path $target | Out-Null
+          cl /nologo /W4 /O2 /MT /Fe:"$target\AITrainerDemo.exe" "tests\fixtures\demo_target.c"
+          if ($LASTEXITCODE -ne 0) { throw "Demo EXE compilation failed" }
+          if (-not (Test-Path "$target\AITrainerDemo.exe")) { throw "Missing demo EXE" }
+
+      - name: Smoke test demo executable
+        run: |
+          $demo = (Resolve-Path "dist\AI-Game-Trainer\Tools\AITrainerDemo.exe").Path
+          $ready = Join-Path $env:RUNNER_TEMP "ai-trainer-demo-ready.json"
+          $p = Start-Process -FilePath $demo -ArgumentList @("--ready-file", $ready) -PassThru
+          try {
+            for ($i=0; $i -lt 30; $i++) {
+              if (Test-Path $ready) { break }
+              if ($p.HasExited) { break }
+              Start-Sleep -Milliseconds 200
+            }
+            if (-not (Test-Path $ready)) { throw "Demo did not produce a ready file" }
+            $info = Get-Content $ready -Raw | ConvertFrom-Json
+            if ([int]$info.pid -ne $p.Id) { throw "Demo PID mismatch" }
+            if (-not ($info.address -match '^0x[0-9A-Fa-f]+$')) { throw "Demo memory address invalid" }
+            Write-Host "Demo executable running with PID $($info.pid)"
+          } finally {
+            if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force }
+          }
 
       - name: Bundle pinned MIT-licensed CE Lua Bridge
         run: |
