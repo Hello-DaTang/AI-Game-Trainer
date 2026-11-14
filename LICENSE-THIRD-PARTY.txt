@@ -1,0 +1,11 @@
+AI Game Trainer v0.1.1 Windows portable distribution
+
+Included CE Lua Bridge:
+  https://github.com/miscusi-peek/cheatengine-mcp-bridge
+Pinned commit: 6bd7ce90479250a9b4b75e7944df9c105ecb2572
+License: MIT (Copyright 2025 miscusi-peek).
+See CE-Bridge/LICENSE.txt bundled in the ZIP for full terms.
+
+The Cheat Engine application itself is NOT bundled.
+Runtime components from Python, pywin32 and PyInstaller are packaged
+under their respective applicable licenses.
