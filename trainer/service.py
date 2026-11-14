@@ -8,7 +8,6 @@ record ID obtained from CE, never user-submitted Lua.
 from __future__ import annotations
 
 import os
-import shutil
 import threading
 from pathlib import Path
 
@@ -34,6 +33,7 @@ class TrainerService:
         self.bridge = bridge or CEBridge()
         self._lock = threading.RLock()
         self._loaded = None
+        self._states = {}
 
     def table_path(self, game_id: str) -> Path:
         self.store.game(game_id)
@@ -43,7 +43,10 @@ class TrainerService:
         games = self.store.games()
         return {
             "games": [
-                {**game, "features": self.store.features(game["id"]),
+                {**game, "features": [
+                    {**feature, "enabled": bool(self._states.get(feature["id"], False))}
+                    for feature in self.store.features(game["id"])
+                ],
                  "has_table": self.table_path(game["id"]).is_file()}
                 for game in games
             ],
@@ -118,6 +121,7 @@ class TrainerService:
             finally:
                 staging.unlink(missing_ok=True)
             self._loaded = None
+            self._states.clear()
             return new_feature
 
     def toggle(self, feature_id: str, enabled: bool):
@@ -132,6 +136,7 @@ class TrainerService:
             pid = self._target_pid(game)
             table_key = (game["id"], pid, path.stat().st_mtime_ns)
             if self._loaded != table_key:
+                self._states.clear()
                 self.bridge.call("open_process", {"process_id_or_name": pid})
                 self._attached_to(pid)
                 self.bridge.call("load_table", {"filename": str(path), "merge": False})
@@ -155,4 +160,5 @@ class TrainerService:
             actual = self.bridge.call("get_memory_record", {"id": record_id}).get("record", {})
             if bool(actual.get("enabled")) != enabled:
                 raise BridgeError("CE 未能切换记录状态；按钮状态未更新")
+            self._states[feature_id] = enabled
             return {"feature_id": feature_id, "enabled": enabled, "process_id": pid}
