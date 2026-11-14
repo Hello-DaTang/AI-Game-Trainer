@@ -1,0 +1,13 @@
+# Local runtime state and third-party checkout
+vendor/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+*.sqlite3
+*.sqlite3-*
+*.CT
+*.ct
+*.pending.*
+.DS_Store

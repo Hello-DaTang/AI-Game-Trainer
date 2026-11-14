@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f9">
+  <title>AI Game Trainer</title>
+  <link href="/style.css" rel="stylesheet">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">✳</span><span>AI Game Trainer<small>PERSONAL WORKSPACE</small></span></div>
+      <div class="nav-title">游戏库</div>
+      <nav id="games" aria-label="游戏列表"></nav>
+      <button class="side-add" id="new-game">＋ 添加游戏</button>
+      <div class="side-bottom"><span class="dot" id="bridge-dot"></span><span id="bridge-status">正在检查 CE Bridge</span><button id="refresh-bridge" title="重新检查连接">↻</button></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div>工作台 <span class="separator">/</span> <span id="breadcrumb">开始</span></div><span class="edition">LOCAL MVP · 0.1</span></header>
+      <div class="main-body">
+        <div class="eyebrow">YOUR GAME · YOUR RULES</div>
+        <h1 id="page-title">管理你自己的游戏修改器</h1>
+        <p class="intro" id="page-intro">把通过 Cheat Engine 验证过的功能保存为可复用按钮。游戏重启后仍能从 CT 文件中恢复。</p>
+        <div id="notice" class="notice hidden" role="status"></div>
+        <section class="panel" id="welcome">
+          <div class="panel-head"><div><h2>添加第一个游戏</h2><p>仅支持你有权修改的本地单机游戏。</p></div></div>
+          <form id="game-form" class="fields">
+            <label>游戏名称<input name="name" required maxlength="128" placeholder="例如：单机测试游戏"></label>
+            <label>游戏进程文件名<input name="exe" required maxlength="255" placeholder="game.exe"></label>
+            <button class="primary" type="submit">添加到游戏库</button>
+          </form>
+        </section>
+        <div id="workspace" class="hidden">
+          <section class="hero">
+            <div class="hero-icon">◈</div>
+            <div><div class="hero-label">CURRENT GAME</div><h2 id="game-name"></h2><div class="process" id="game-exe"></div></div>
+            <span class="pill" id="table-status">未保存 CT</span>
+          </section>
+          <div class="section-title"><div><h2>已保存功能</h2><p>点击即向 Cheat Engine 发送指令；首次操作将自动加载此游戏的 CT 文件。</p></div></div>
+          <section class="panel features" id="features"></section>
+          <section class="panel capture">
+            <div class="panel-head"><div><h2>保存新的修改功能</h2><p>先在 Cheat Engine 或 Codex + MCP 中完成探索，并将结果添加成 CE 地址列表记录。</p></div></div>
+            <div class="guide"><span class="guide-step">01</span> 在 CE 中打开正确游戏进程 → 创建并验证一条记录。<br><span class="guide-step">02</span> 点击“读取 CE 记录”，选中想保存为按钮的功能。<br><span class="guide-step">03</span> 保存当前整张 CT 表，下次可直接启用。</div>
+            <div class="capture-actions"><button class="secondary" id="read-records">读取 CE 记录</button><span id="record-hint"></span></div>
+            <form id="capture-form" class="fields hidden">
+              <label>CE 地址列表中的记录<select name="record_description" id="record-options" required></select></label>
+              <label>按钮显示名称<input name="title" placeholder="例如：无限体力" maxlength="128" required></label>
+              <button class="primary" type="submit">保存成一键按钮</button>
+            </form>
+          </section>
+          <div class="footnote">提示：保存的是当前 CE 表的完整快照。若游戏更新导致指针或 AOB 失效，需重新定位并验证，不保证跨版本自动可用。</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
