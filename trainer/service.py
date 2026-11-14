@@ -12,6 +12,7 @@ import threading
 from pathlib import Path
 
 from .bridge import BridgeError, CEBridge
+from .diagnostics import run_selftest
 from .store import Store, StoreError
 
 
@@ -52,6 +53,10 @@ class TrainerService:
             ],
             "data_dir": str(self.data_dir),
         }
+
+    def selftest(self) -> dict:
+        with self._lock:
+            return run_selftest(self.bridge)
 
     def status(self) -> dict:
         try:

@@ -106,6 +106,28 @@ async function refreshBridge() {
     el("bridge-status").title = status.message || "";
   } catch (err) { el("bridge-status").textContent = "Bridge 检查失败"; }
 }
+el("self-test").addEventListener("click", async () => {
+  const button = el("self-test");
+  const output = el("self-test-result");
+  button.disabled = true;
+  button.textContent = "正在测试 CE 内存读写…";
+  output.classList.remove("hidden", "passed");
+  output.textContent = "自动测试进行中，预计只需几秒。请保持 Cheat Engine 与 Bridge 运行。";
+  try {
+    const result = await api("/api/diagnostics/self-test", {});
+    output.classList.add("passed");
+    const steps = Array.isArray(result.steps) ? result.steps.join("\n✓ ") : "";
+    const warning = (result.warnings || []).join("\n");
+    output.textContent = "✓ 实测通过\n✓ " + steps + "\n" + (result.note || "") + (warning ? "\n提示：" + warning : "");
+    await refreshBridge();
+  } catch (err) {
+    output.classList.remove("passed");
+    output.textContent = "✗ 实测失败：" + err.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "重新测试";
+  }
+});
 el("new-game").addEventListener("click", () => {
   currentGame = null;
   el("welcome").classList.remove("hidden");

@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 from .bridge import BridgeError
+from .diagnostics import DiagnosticError
 from .service import TrainerService
 from .store import StoreError
 
@@ -54,6 +55,8 @@ def make_handler(service: TrainerService):
                 return service.capture(
                     payload["game_id"], payload["title"], payload["record_description"]
                 )
+            if path == "/api/diagnostics/self-test":
+                return service.selftest()
             if path == "/api/features/toggle":
                 return service.toggle(payload["feature_id"], payload["enabled"])
             raise StoreError("未知操作")
@@ -84,7 +87,7 @@ def make_handler(service: TrainerService):
                     self.wfile.write(data)
                     return
                 return self._json(404, {"error": "Not found"})
-            except (StoreError, ValueError, KeyError, TypeError) as exc:
+            except (StoreError, DiagnosticError, ValueError, KeyError, TypeError) as exc:
                 return self._json(400, {"error": str(exc)})
             except BridgeError as exc:
                 return self._json(502, {"error": str(exc)})
