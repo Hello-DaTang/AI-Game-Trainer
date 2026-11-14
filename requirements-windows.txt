@@ -1,0 +1,2 @@
+# Required only for Windows named-pipe communication with the CE Lua bridge.
+pywin32>=306
