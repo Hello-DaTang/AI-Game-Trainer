@@ -90,7 +90,9 @@ class CEBridge:
                 win32file.GENERIC_READ | win32file.GENERIC_WRITE,
                 0, None, win32file.OPEN_EXISTING, 0, None,
             )
-            win32file.WriteFile(handle, request)
+            # Keep the two writes used by upstream v12 (header, then JSON body).
+            win32file.WriteFile(handle, request[:4])
+            win32file.WriteFile(handle, request[4:])
             length_bytes = CEBridge._read_pipe(handle, 4, win32file)
             length = struct.unpack("<I", length_bytes)[0]
             if length > MAX_REPLY:
